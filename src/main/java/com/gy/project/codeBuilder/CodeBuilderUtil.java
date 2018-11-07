@@ -32,8 +32,7 @@ public class CodeBuilderUtil {
         String tableNames[] = tableName.split(";");
         String tablePrefix = map.get("tablePrefix");
         String tablePrefixs[] = tablePrefix.split(";");
-        //包名
-        String packageName = NamingStrategy.removePrefix(tableName,tablePrefix);
+        String packageName = NamingStrategy.removePrefix(tableName,tablePrefix);//包名
         packageName = NamingStrategy.underlineToCamel(packageName);
 
         // 全局配置
