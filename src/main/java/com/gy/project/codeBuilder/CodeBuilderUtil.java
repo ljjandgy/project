@@ -21,7 +21,7 @@ public class CodeBuilderUtil {
         AutoGenerator mpg = new AutoGenerator();
 
         //接收从Controller传值
-        String dirPath = "D://";//文件生成位置
+        String dirPath = map.get("dirPath");//文件生成位置
         String author = map.get("author");//JavaDoc author信息
         //数据库信息
         String driverName = map.get("driverName");
@@ -103,8 +103,8 @@ public class CodeBuilderUtil {
         // 自定义模板配置，可以 copy 源码 mybatis-plus/src/main/resources/templates 下面内容修改，
         // 放置自己项目的 src/main/resources/templates 目录下, 默认名称一下可以不配置，也可以自定义模板名称
         // 如上任何一个模块如果设置 空 OR Null 将不生成该模块。
-        TemplateConfig tc = new TemplateConfig();
-       /* tc.setController("...");
+        /* TemplateConfig tc = new TemplateConfig();
+        tc.setController("...");
         tc.setEntity("...");
         tc.setMapper("...");
         tc.setXml("...");
@@ -119,8 +119,8 @@ public class CodeBuilderUtil {
         mpg.setStrategy(strategy);
         //包配置
         mpg.setPackageInfo(pc);
-        //模板生成配置
-        mpg.setTemplate(tc);
+/*        //模板生成配置
+        mpg.setTemplate(tc);*/
 
         // 执行生成
         mpg.execute();

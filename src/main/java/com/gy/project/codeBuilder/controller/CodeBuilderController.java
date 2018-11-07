@@ -46,7 +46,7 @@ public class CodeBuilderController {
         //通过系统信息获得主机名称
         String author = properties.getProperty("user.name");
         //获取系统路径
-        String dirPath = properties.getProperty("user.dir")+ "/src/main/com/gy/project";
+        String dirPath = properties.getProperty("user.dir")+ "/src/main/java/com/gy/project";
 
         //生成文件的表名
         String tableName ="t_company";
