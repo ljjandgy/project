@@ -1,7 +1,6 @@
 package com.gy.project.codeBuilder.controller;
 
-import com.gy.project.codeBuilder.CodeBuilderUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gy.project.codeBuilder.util.CodeBuilderUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,8 +44,10 @@ public class CodeBuilderController {
         Properties properties = System.getProperties();
         //通过系统信息获得主机名称
         String author = properties.getProperty("user.name");
-        //获取系统路径
-        String dirPath = properties.getProperty("user.dir")+ "/src/main/java/com/gy/project";
+        //获取后台文件生成路径
+        String javaPath = properties.getProperty("user.dir")+ "/src/main/java";
+        //获取前台文件生成路径
+        String htmlPath = properties.getProperty("user.dir")+ "/src/main/resources/views/";
 
         //生成文件的表名
         String tableName ="t_company";
@@ -59,9 +60,10 @@ public class CodeBuilderController {
         map.put("password",password);
         map.put("url",url);
         map.put("author",author);
-        map.put("dirPath",dirPath);
+        map.put("javaPath",javaPath);
         map.put("tableName",tableName);
         map.put("tablePrefix",tablePrefix);
+        map.put("htmlPath",htmlPath);
 
         //调用
         codeBuilderUtil.a(map);

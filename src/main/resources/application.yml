@@ -15,22 +15,22 @@ spring:
       static-path-pattern: /**
   resources:
     static-locations: classpath:/views/,classpath:/static/
-  #Ä¬ÈÏÆôÓÃ¿ª·¢»·¾³ÅäÖÃ£¬¿ª·¢»·¾³Îªdev£¬Éú²ú»·¾³Îªpro
+  #é»˜è®¤å¯ç”¨å¼€å‘ç¯å¢ƒé…ç½®ï¼Œå¼€å‘ç¯å¢ƒä¸ºdevï¼Œç”Ÿäº§ç¯å¢ƒä¸ºpro
   profiles:
     active: dev
 
-#mybatisÅäÖÃ
-## ¸ÃÅäÖÃ½ÚµãÎª¶ÀÁ¢µÄ½Úµã£¬ÓĞºÜ¶àÍ¬Ñ§ÈİÒ×½«Õâ¸öÅäÖÃ·ÅÔÚspringµÄ½ÚµãÏÂ£¬µ¼ÖÂÅäÖÃÎŞ·¨±»Ê¶±ğ
+#mybatisé…ç½®
+## è¯¥é…ç½®èŠ‚ç‚¹ä¸ºç‹¬ç«‹çš„èŠ‚ç‚¹ï¼Œæœ‰å¾ˆå¤šåŒå­¦å®¹æ˜“å°†è¿™ä¸ªé…ç½®æ”¾åœ¨springçš„èŠ‚ç‚¹ä¸‹ï¼Œå¯¼è‡´é…ç½®æ— æ³•è¢«è¯†åˆ«
 mybatis:
-  mapper-locations: classpath:com.gy.myproject.**.mapping/*.xml  #×¢Òâ£ºÒ»¶¨Òª¶ÔÓ¦mapperÓ³ÉäxmlÎÄ¼şµÄËùÔÚÂ·¾¶
-  type-aliases-package: com.gy.myproject.**.model  # ×¢Òâ£º¶ÔÓ¦ÊµÌåÀàµÄÂ·¾¶
+  mapper-locations: classpath:com.gy.myproject.**.mapping/*.xml  #æ³¨æ„ï¼šä¸€å®šè¦å¯¹åº”mapperæ˜ å°„xmlæ–‡ä»¶çš„æ‰€åœ¨è·¯å¾„
+  type-aliases-package: com.gy.myproject.**.model  # æ³¨æ„ï¼šå¯¹åº”å®ä½“ç±»çš„è·¯å¾„
 
 mybatis-plus:
   mapper-locations: classpath*:com/**/mapping/*.xml
   typeAliasesPackage: com.**.model
   #typeEnumsPackage: com.jxdinfo.hussar.common.constant.enums
   global-config:
-    id-type: 3  #0:Êı¾İ¿âID×ÔÔö   1:ÓÃ»§ÊäÈëid  2:È«¾ÖÎ¨Ò»id(IdWorker)  3:È«¾ÖÎ¨Ò»ID(uuid)
+    id-type: 3  #0:æ•°æ®åº“IDè‡ªå¢   1:ç”¨æˆ·è¾“å…¥id  2:å…¨å±€å”¯ä¸€id(IdWorker)  3:å…¨å±€å”¯ä¸€ID(uuid)
     db-column-underline: false
     refresh-mapper: true
     logic-delete-value: 0
@@ -38,13 +38,13 @@ mybatis-plus:
     sql-injector: com.baomidou.mybatisplus.mapper.LogicSqlInjector
   configuration:
     map-underscore-to-camel-case: false
-    cache-enabled: true #ÅäÖÃµÄ»º´æµÄÈ«¾Ö¿ª¹Ø
-    lazyLoadingEnabled: true #ÑÓÊ±¼ÓÔØµÄ¿ª¹Ø
-    multipleResultSetsEnabled: true #¿ªÆôµÄ»°£¬ÑÓÊ±¼ÓÔØÒ»¸öÊôĞÔÊ±»á¼ÓÔØ¸Ã¶ÔÏóÈ«²¿ÊôĞÔ£¬·ñÔò°´Ğè¼ÓÔØÊôĞÔ
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #´òÓ¡sqlÓï¾ä,µ÷ÊÔÓÃ
+    cache-enabled: true #é…ç½®çš„ç¼“å­˜çš„å…¨å±€å¼€å…³
+    lazyLoadingEnabled: true #å»¶æ—¶åŠ è½½çš„å¼€å…³
+    multipleResultSetsEnabled: true #å¼€å¯çš„è¯ï¼Œå»¶æ—¶åŠ è½½ä¸€ä¸ªå±æ€§æ—¶ä¼šåŠ è½½è¯¥å¯¹è±¡å…¨éƒ¨å±æ€§ï¼Œå¦åˆ™æŒ‰éœ€åŠ è½½å±æ€§
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #æ‰“å°sqlè¯­å¥,è°ƒè¯•ç”¨
 
 
-#pagehelper·ÖÒ³²å¼ş
+#pagehelperåˆ†é¡µæ’ä»¶
 pagehelper:
   helperDialect: mysql
   reasonable: true

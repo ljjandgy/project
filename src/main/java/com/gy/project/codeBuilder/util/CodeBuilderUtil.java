@@ -1,11 +1,14 @@
-package com.gy.project.codeBuilder;
+package com.gy.project.codeBuilder.util;
 
 import com.baomidou.mybatisplus.generator.AutoGenerator;
+import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.converts.MySqlTypeConvert;
+import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.DbColumnType;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 
+import java.io.File;
 import java.util.*;
 
 /**
@@ -21,7 +24,8 @@ public class CodeBuilderUtil {
         AutoGenerator mpg = new AutoGenerator();
 
         //接收从Controller传值
-        String dirPath = map.get("dirPath");//文件生成位置
+        String javaPath = map.get("javaPath");//后台文件生成位置
+        String htmlPath = map.get("htmlPath");//前台文件生成位置
         String author = map.get("author");//JavaDoc author信息
         //数据库信息
         String driverName = map.get("driverName");
@@ -37,7 +41,7 @@ public class CodeBuilderUtil {
 
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir(dirPath);//生成路径
+        gc.setOutputDir(javaPath);//后台生成路径
         gc.setAuthor(author);//JavaDoc author
         gc.setFileOverride(true); //是否覆盖
         gc.setActiveRecord(true);// 不需要ActiveRecord特性的请改为false,一个实体类对应数据库一个表
@@ -52,7 +56,6 @@ public class CodeBuilderUtil {
             // 自定义数据库表字段类型转换【可选】
             @Override
             public DbColumnType processTypeConvert(String fieldType) {
-                System.out.println("转换类型：" + fieldType);
                 // 注意！！processTypeConvert 存在默认类型转换，如果不是你要的效果请自定义返回、非如下直接返回。
                 return super.processTypeConvert(fieldType);
             }
@@ -68,29 +71,11 @@ public class CodeBuilderUtil {
         strategy.setTablePrefix(tablePrefixs);// 此处可以修改为您的表前缀
         strategy.setNaming(NamingStrategy.underline_to_camel);// 表名生成策略
         strategy.setInclude(tableNames); // 需要生成的表，若整个数据库都全部生成，则注释本句即可
-        // strategy.setExclude(new String[]{"test"}); // 排除生成的表
-        // 自定义实体父类
-        // strategy.setSuperEntityClass("com.baomidou.demo.TestEntity");
-        // 自定义实体，公共字段
-        // strategy.setSuperEntityColumns(new String[] { "test_id", "age" });
-        // 自定义 mapper 父类
-        // strategy.setSuperMapperClass("com.baomidou.demo.TestMapper");
-        // 自定义 service 父类
-        // strategy.setSuperServiceClass("com.baomidou.demo.TestService");
-        // 自定义 service 实现类父类
-        // strategy.setSuperServiceImplClass("com.baomidou.demo.TestServiceImpl");
-        // 自定义 controller 父类
-        // strategy.setSuperControllerClass("com.baomidou.demo.TestController");
-        // 【实体】是否生成字段常量（默认 false）
-        // public static final String ID = "test_id";
-        // strategy.setEntityColumnConstant(true);
-        // 【实体】是否为构建者模型（默认 false）
-        // public User setName(String name) {this.name = name; return this;}
         strategy.setEntityBuilderModel(true);
 
         // 包配置
         PackageConfig pc = new PackageConfig();
-        pc.setParent("");//父文件夹
+        pc.setParent("com.gy.project");//父文件夹
         pc.setModuleName(packageName);//包名
         pc.setController("controller");
         pc.setEntity("entity");
@@ -99,12 +84,70 @@ public class CodeBuilderUtil {
         pc.setServiceImpl("service.impl");
         pc.setXml("dao.mapper");
 
+        // 注入自定义配置，可以在 VM 中使用 cfg.abc 【可无】  ${cfg.abc}
+        InjectionConfig cfg = new InjectionConfig() {
+            @Override
+            public void initMap() {
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put("abc", this.getConfig().getGlobalConfig().getAuthor() + "-mp");
+                this.setMap(map);
+            }
+        };
+
+        // 自定义 xxx.html 生成
+        List<FileOutConfig> focList = new ArrayList<FileOutConfig>();
+        focList.add(new FileOutConfig("/templates/list.html.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                //判断前台文件夹是否存在
+                File file=new File(htmlPath + tableInfo.getEntityPath());
+                if(!file.exists()){//如果文件夹不存在
+                    file.mkdir();//创建文件夹
+                }
+
+                // 自定义输入文件名称
+                return htmlPath + tableInfo.getEntityPath() + "/" + tableInfo.getEntityPath() + ".html";
+            }
+        });
+
+        // 自定义  xxxAdd.html 生成
+        focList.add(new FileOutConfig("/templates/add.html.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                //判断前台文件夹是否存在
+                File file=new File(htmlPath + tableInfo.getEntityPath());
+                if(!file.exists()){//如果文件夹不存在
+                    file.mkdir();//创建文件夹
+                }
+
+                // 自定义输入文件名称
+                return htmlPath + tableInfo.getEntityPath() + "/" + tableInfo.getEntityPath() + "Add.html";
+            }
+        });
+
+       // 自定义  xxxUpdate.html 生成
+        focList.add(new FileOutConfig("/templates/update.html.vm") {
+            @Override
+            public String outputFile(TableInfo tableInfo) {
+                //判断前台文件夹是否存在
+                File file=new File(htmlPath + tableInfo.getEntityPath());
+                if(!file.exists()){//如果文件夹不存在
+                    file.mkdir();//创建文件夹
+                }
+
+                // 自定义输入文件名称
+                return htmlPath + tableInfo.getEntityPath() + "/" + tableInfo.getEntityPath() + "Update.html";
+            }
+        });
+
+        cfg.setFileOutConfigList(focList);
+
         // 自定义模板配置，可以 copy 源码 mybatis-plus/src/main/resources/templates 下面内容修改，
         // 放置自己项目的 src/main/resources/templates 目录下, 默认名称一下可以不配置，也可以自定义模板名称
         // 如上任何一个模块如果设置 空 OR Null 将不生成该模块。
-        /* TemplateConfig tc = new TemplateConfig();
-        tc.setController("...");
-        tc.setEntity("...");
+        TemplateConfig tc = new TemplateConfig();
+        tc.setController("/templates/controller.java.vm");
+     /*   tc.setEntity("...");
         tc.setMapper("...");
         tc.setXml("...");
         tc.setService("...");
@@ -118,8 +161,10 @@ public class CodeBuilderUtil {
         mpg.setStrategy(strategy);
         //包配置
         mpg.setPackageInfo(pc);
-/*        //模板生成配置
-        mpg.setTemplate(tc);*/
+        //前台html生成配置
+        mpg.setCfg(cfg);
+        //模板生成配置
+        mpg.setTemplate(tc);
 
         // 执行生成
         mpg.execute();
